@@ -30,3 +30,6 @@ In order to start the system, navigate to the terminal under the root of the cra
 
 You should see a dashboard like this:
 ![Crawler Dashboard](img/dashboard.png)
+
+The dashboard will auto-recheck the URLs at the configured intervals (URL specific).
+
