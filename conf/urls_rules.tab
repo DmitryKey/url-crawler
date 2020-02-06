@@ -1,0 +1,6 @@
+https://semanticanalyzer.info/	50000	Insider	Test
+https://google.com	20000	type="[^"]+
+https://some-non-existing-site.com	30000	Non-existent-string
+https://www.huawei.com/en/	10010	Events
+https://tatianabatanina.wordpress.com/	10000	RSS
+https://www.kielipolku.com/	20000	SUOMEN

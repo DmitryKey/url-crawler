@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Crawler Dashboard</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <style>
+            th, td {
+                padding: 15px;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+    <script>
+        function myTimer(url) {
+            $.get("checkurl?url=" + url,
+             'json',
+             function(data, status){
+                console.log("URL:" + url + "\nData: " + data + "\nStatus: " + status);
+                data = JSON.parse(data);
+                status_code = data["status"];
+                rules = data["rules"];
+                status_elem_id = url + "_status";
+                // update status code and colour
+                document.getElementById(status_elem_id).innerHTML = status_code;
+                if (status_code == 200) {
+                    document.getElementById(status_elem_id).style.backgroundColor = "green";
+                }
+                else {
+                    document.getElementById(status_elem_id).style.backgroundColor = "red";
+                 }
+
+                 // update rules
+                 rules_status = "";
+                 for (var i = 0; i < rules.length; i++) {
+                     rules_status += "<p>" + "<b>Rule</b> " + rules[i]["rule"] + " <b>is</b> " + rules[i]["status"] + "</p>";
+                 }
+                 rule_elem_id = url + "_rules";
+                 document.getElementById(rule_elem_id).innerHTML = rules_status;
+              });
+              var d = new Date(); 
+              document.getElementById(url).innerHTML = d.toLocaleTimeString();
+        }
+    </script>
+        <h1>Crawler Dashboard</h1>
+        <table width="100%" border="0">
+            <thead>
+            <tr>
+                <th>Site</th>
+                <th>Status</th>
+                <th>Rule statuses</th>
+                <th>Last Checked</th>
+                <th>Interval</th>
+            </tr>
+            </thead>
+            {% for status in statuses %}
+            <tr>
+                <td><a href='{{ status["url"] }}' target="_blank">{{ status["url"] }}</a></td>
+                {% if status["status"] == 200 %}
+                    <td bgcolor="green" id='{{status["url"]}}_status'>{{ status["status"] | safe }}</td>
+                {% else %}
+                    <td bgcolor="red" id='{{status["url"]}}_status'>{{ status["status"] | safe }}</td>
+                {% endif %}
+                <td id='{{status["url"]}}_rules'>
+                    {% for item in rule_statuses[status["url"]] %}
+                    <p>
+                        <b>Rule</b> {{item["rule"]}} <b>is</b> {{item["status"]}}
+                    </p>
+                    {% endfor %}
+                </td>
+                <td>
+                    <p id='{{status["url"]}}'></p>
+                    <script>
+                        var myVar = setInterval(myTimer.bind(null, '{{status["url"]}}'), {{intervals[status["url"]]}});
+                    </script>
+                </td>
+                <td>
+                    <p>Every {{intervals[status["url"]]}} ms</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
