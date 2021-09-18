@@ -1,6 +1,6 @@
 System description
 ===
-The crawler system allows for configurable periodic check of URLs for two requirements:
+This crawler system allows for configurable periodic check of URLs for two requirements:
 1. URL must respond with status code 200
 2. URL must match configured rules
 
